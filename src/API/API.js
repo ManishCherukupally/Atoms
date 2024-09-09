@@ -6,16 +6,16 @@ axios.defaults.withCredentials =true;
 axios.defaults.xsrfCookieName= 'csrftoken';
 axios.defaults.xsrfHeaderName='x-csrftoken';
 
-// const client = axios.create({
-//     baseURL: 'http://43.204.19.66:8000/backend',
-// });
-// export default client;
-
-
 const client = axios.create({
-    baseURL: 'http://192.168.29.144:8000/backend',
+    baseURL: 'http://43.204.19.66:8000/backend',
 });
- export default client
+export default client;
+
+
+// const client = axios.create({
+//     baseURL: 'http://192.168.29.144:8000/backend',
+// });
+//  export default client
 //  const client = axios.create({
 //     baseURL: '',
 // });
