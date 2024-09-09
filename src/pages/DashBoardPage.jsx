@@ -25,7 +25,7 @@ const DashBoardPage = () =>
     // Establish WebSocket connection and handle messages
     useEffect(() =>
     {
-        let url = `ws://192.168.29.144:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
+        let url = `ws://43.204.19.66:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
         const socket = new WebSocket(url);
 
         socket.onopen = (event) =>
