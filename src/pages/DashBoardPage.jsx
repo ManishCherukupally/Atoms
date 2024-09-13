@@ -10,6 +10,7 @@ import DynamicLineChart from '../components/charts/DynamicLineChart';
 import { Link } from 'react-router-dom';
 import { useHover } from '@mantine/hooks';
 import '../index.css';
+import client from '../API/API';
 
 const DashBoardPage = () =>
 {
@@ -25,7 +26,7 @@ const DashBoardPage = () =>
     // Establish WebSocket connection and handle messages
     useEffect(() =>
     {
-        let url = `ws://43.204.19.66:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
+        let url = `ws://dev.atomssol.in/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
         const socket = new WebSocket(url);
 
         socket.onopen = (event) =>
@@ -80,6 +81,13 @@ const DashBoardPage = () =>
             }
         };
     }, []);
+
+    // useEffect(()=>{
+    //    client.get("rooms")
+    //    .then(resp => console.log(resp)
+    //    )
+        
+    // },[])
 
     // Render the dashboard component
     return (
