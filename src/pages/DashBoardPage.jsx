@@ -12,8 +12,7 @@ import { useHover } from '@mantine/hooks';
 import '../index.css';
 import client from '../API/API';
 
-const DashBoardPage = () =>
-{
+const DashBoardPage = () => {
     // State variables to store data
     const [totalCount, setTotalCount] = useState({});
     const [graphData, setGraphData] = useState([]);
@@ -24,23 +23,19 @@ const DashBoardPage = () =>
 
 
     // Establish WebSocket connection and handle messages
-    useEffect(() =>
-    {
-        let url = `ws://dev.atomssol.in/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
+    useEffect(() => {
+        let url = `ws://dev.atomssol.in:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
         const socket = new WebSocket(url);
 
-        socket.onopen = (event) =>
-        {
+        socket.onopen = (event) => {
             console.log('Websocket Connection established', event);
         };
 
-        socket.onmessage = (event) =>
-        {
+        socket.onmessage = (event) => {
             const b = JSON.parse(event.data);
 
             // Filter data based on username
-            if (b.user_name === window.localStorage.getItem('username'))
-            {
+            if (b.user_name === window.localStorage.getItem('username')) {
                 console.log("Control Machines " + b.data);
             }
 
@@ -51,31 +46,24 @@ const DashBoardPage = () =>
             // Sort machines into active and inactive lists
             const active = [];
             const inactive = [];
-            b.machine_status.forEach((machine) =>
-            {
-                if (machine.Machines_status === 'Inactive')
-                {
+            b.machine_status.forEach((machine) => {
+                if (machine.Machines_status === 'Inactive') {
                     inactive.push(machine);
-                } else
-                {
+                } else {
                     active.push(machine);
                 }
             });
             setMachineStatus([...active, ...inactive]);
         };
 
-        socket.onclose = () =>
-        {
-            socket.onopen = (event) =>
-            {
+        socket.onclose = () => {
+            socket.onopen = (event) => {
                 console.log('WebSocket connection established again after closed :', event);
             };
         };
 
-        return () =>
-        {
-            if (socket)
-            {
+        return () => {
+            if (socket) {
                 console.log('WebSocket connection closed: close event');
                 socket.close();
             }
@@ -86,7 +74,7 @@ const DashBoardPage = () =>
     //    client.get("rooms")
     //    .then(resp => console.log(resp)
     //    )
-        
+
     // },[])
 
     // Render the dashboard component
@@ -161,17 +149,13 @@ const DashBoardPage = () =>
                                     </ScrollArea>
                                 </Card>
                                 {
-                                    graphData.map((card) =>
-                                    {
-                                        if (card.card === "Bar")
-                                        {
+                                    graphData.map((card) => {
+                                        if (card.card === "Bar") {
                                             const ledger = card.ledger;
                                             return ledger.length > 1 ? <SeriesBarChart data={card} key={card.card} /> : <BarChart data={card} key={card.card} />;
-                                        } else if (card.card === "Pie")
-                                        {
+                                        } else if (card.card === "Pie") {
                                             return <DougnotChart data={card} key={card.card} />;
-                                        } else if (card.card === 'Line')
-                                        {
+                                        } else if (card.card === 'Line') {
                                             const ledger = card.ledger;
                                             return ledger.length > 1 ? <SeriesLineChart data={card} key={card.card} /> : <DynamicLineChart data={card} key={card.card} />;
                                         }

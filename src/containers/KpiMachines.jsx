@@ -16,8 +16,7 @@ import DynamicLineChart from '../components/charts/DynamicLineChart';
 import { fullDate } from '../utils/reusedfunctions';
 import AlarmCard from '../components/cards/AlarmCard';
 
-const KpiMachines = (props) =>
-{
+const KpiMachines = (props) => {
     // props
     const { nodeid, machineid, screensize } = props
 
@@ -27,8 +26,7 @@ const KpiMachines = (props) =>
     const [timestamp, setTimestamp] = useState("")
 
     // Funtion for getting KPI data websocket and rest api starts here
-    useEffect(() =>
-    {
+    useEffect(() => {
         setKpidata([])
         // if (nodeid !== "")
         // {
@@ -54,24 +52,20 @@ const KpiMachines = (props) =>
         //     });
         // }
 
-        let baseurl = `ws://dev.atomssol.in/kpi_web_socket/?machine_id=${machineid}`
+        let baseurl = `ws://dev.atomssol.in:8000/kpi_web_socket/?machine_id=${machineid}`
 
         const socket = new WebSocket(baseurl);
-        socket.onopen = (event) =>
-        {
+        socket.onopen = (event) => {
             console.log('WebSocket connection established:', event);
             // setSocket(socket);
         };
-        socket.onmessage = (event) =>
-        {
+        socket.onmessage = (event) => {
             const b = JSON.parse(event.data)
             const data = b.resultant_data
             setKpidata(data);
 
-            data.map((card) =>
-            {
-                if (card.card === "Status")
-                {
+            data.map((card) => {
+                if (card.card === "Status") {
                     setStatus(card)
                 }
             })
@@ -88,19 +82,15 @@ const KpiMachines = (props) =>
 
             // console.log("Kpi Machines : " + JSON.stringify(b));
         };
-        socket.onclose = () =>
-        {
-            socket.onopen = (event) =>
-            {
+        socket.onclose = () => {
+            socket.onopen = (event) => {
 
                 console.log('WebSocket connection established again after closed :', event);
                 // setSocket(socket);
             };
         };
-        return () =>
-        {
-            if (socket)
-            {
+        return () => {
+            if (socket) {
                 console.log('WebSocket connection closed: close event');
                 socket.close();
             }
@@ -112,18 +102,14 @@ const KpiMachines = (props) =>
     // Function for dividing no of coloums in UI based on lenght starts here
     const length = kpidata.length
     let col
-    function cols(noOfCols)
-    {
-        if (noOfCols === 1)
-        {
+    function cols(noOfCols) {
+        if (noOfCols === 1) {
             col = 1
         }
-        else if (noOfCols >= 3)
-        {
+        else if (noOfCols >= 3) {
             col = 3
         }
-        else if (noOfCols === 2)
-        {
+        else if (noOfCols === 2) {
             col = 2
         }
         return col
@@ -154,60 +140,48 @@ const KpiMachines = (props) =>
                             {
 
                                 // Function for rendering Cards in UI starts here
-                                kpidata.map((card) =>
-                                {
+                                kpidata.map((card) => {
 
 
-                                    if (card.card === 'Bar')
-                                    {
+                                    if (card.card === 'Bar') {
                                         const ledger = card.ledger
 
-                                        if (ledger.length > 1)
-                                        {
+                                        if (ledger.length > 1) {
                                             // SeriesBarChart Component
                                             return <SeriesBarChart data={card} screensize={screensize} />
-                                        } else
-                                        {
+                                        } else {
                                             // DynamicBarChart Component
                                             return <DynamicBarChart data={card} screensize={screensize} />
                                         }
                                     }
-                                    if (card.card === 'Energy_Card')
-                                    {
+                                    if (card.card === 'Energy_Card') {
                                         // EnergyCard Component
                                         return <EnergyCard data={card} screensize={screensize} />
                                     }
-                                    if (card.card === 'Line')
-                                    {
+                                    if (card.card === 'Line') {
                                         const ledger = card.ledger
 
-                                        if (ledger.length > 1)
-                                        {
+                                        if (ledger.length > 1) {
                                             // SeriesLineChart Component
                                             return <SeriesLineChart data={card} screensize={screensize} />
-                                        } else
-                                        {
+                                        } else {
                                             // DynamicLineChart Component
                                             return <DynamicLineChart data={card} screensize={screensize} />
                                         }
                                     }
-                                    if (card.card === 'Pie')
-                                    {
+                                    if (card.card === 'Pie') {
                                         // DougnotChart Component
                                         return <DougnotChart data={card} screensize={screensize} />
                                     }
-                                    if (card.card === 'RunTime')
-                                    {
+                                    if (card.card === 'RunTime') {
                                         // DougnotChart Component
                                         return <DougnotChart data={card} screensize={screensize} />
                                     }
-                                    if (card.card === 'Text')
-                                    {
+                                    if (card.card === 'Text') {
                                         // TextCard Component
                                         return <TextCard data={card} screensize={screensize} />
                                     }
-                                    if (card.card === 'Alarm')
-                                    {
+                                    if (card.card === 'Alarm') {
                                         // AlarmCard Component
                                         return <AlarmCard data={card} screensize={screensize} />
                                     }

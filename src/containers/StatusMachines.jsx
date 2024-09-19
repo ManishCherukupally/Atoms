@@ -10,8 +10,7 @@ import NoDataAvailable from '../components/noDataAvailable/NoDataAvailable';
 import DigitalDataCard from '../components/cards/DigitalDataCard';
 import AnalogDataCard from '../components/cards/AnalogDataCard';
 
-const StatusMachines = (props) =>
-{
+const StatusMachines = (props) => {
     // props
     const { nodeid, machineid } = props;
 
@@ -65,19 +64,16 @@ const StatusMachines = (props) =>
 
     // Function for Getting StatusMachines data websocket starts here
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         setStatusData([])
-        let baseurl = `ws://dev.atomssol.in/machine_mqtt_data/?machine_id=${machineid}`
+        let baseurl = `ws://dev.atomssol.in:8000/machine_mqtt_data/?machine_id=${machineid}`
         const socket = new WebSocket(baseurl)
 
-        socket.onopen = (event) =>
-        {
+        socket.onopen = (event) => {
             console.log("WebSocket connection established:", event)
         }
 
-        socket.onmessage = (event) =>
-        {
+        socket.onmessage = (event) => {
             const websocketdata = JSON.parse(event.data)
             const data = websocketdata.iostatus
             console.log("io data : " + JSON.stringify(websocketdata))
@@ -91,21 +87,17 @@ const StatusMachines = (props) =>
             setStatusData(rest)
             setTimestamp(Timestamp)
         }
-        socket.onclose = (event) =>
-        {
+        socket.onclose = (event) => {
             // if (ev) {
 
             // }
-            socket.onopen = (event) =>
-            {
+            socket.onopen = (event) => {
                 console.log('WebSocket connection established again after closed :', event);
 
             }
         }
-        return () =>
-        {
-            if (socket)
-            {
+        return () => {
+            if (socket) {
                 console.log('WebSocket connection closed: close event');
                 socket.close()
 
@@ -127,8 +119,7 @@ const StatusMachines = (props) =>
                     <Title fw={500} fz={16} p={'1rem'} ml={'0rem'} color='var(--color-onclick)'>Last updated at: {fullDate(timeStamp)} </Title>
                     {/* Segment  to display the cards */}
                     <SegmentedControl mr={"1rem"} color="blue"
-                        onChange={(value) =>
-                        {
+                        onChange={(value) => {
                             setValue(value)
                         }}
                         data={[

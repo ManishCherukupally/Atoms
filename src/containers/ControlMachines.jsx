@@ -8,8 +8,7 @@ import { fullDate } from '../utils/reusedfunctions'
 import NoDataAvailable from '../components/noDataAvailable/NoDataAvailable'
 
 
-const ControlMachines = (props) =>
-{
+const ControlMachines = (props) => {
     // props starts here
     const { nodeid, machineid } = props
     // props ends here
@@ -23,8 +22,7 @@ const ControlMachines = (props) =>
     const [length, setLenght] = useState(0)
 
     // Function for getting controls data starts here both rest api & websocket
-    useEffect(() =>
-    {
+    useEffect(() => {
         setLenght(0)
 
         // rest api
@@ -64,23 +62,19 @@ const ControlMachines = (props) =>
         // }
 
         // web socket
-        function websocket()
-        {
-            let url = `ws://dev.atomssol.in/Control_Socket/?machine_id=${machineid}`
+        function websocket() {
+            let url = `ws://dev.atomssol.in:8000/Control_Socket/?machine_id=${machineid}`
 
             const socket = new WebSocket(url)
 
-            socket.onopen = (event) =>
-            {
+            socket.onopen = (event) => {
                 console.log('WebSocket connection established:', event);
             }
-            socket.onmessage = (event) =>
-            {
+            socket.onmessage = (event) => {
                 const b = JSON.parse(event.data)
                 // console.log("stf : " + JSON.stringify(b))
                 // console.log("Web socket started");
-                if (b.user_name === window.localStorage.getItem('username'))
-                {
+                if (b.user_name === window.localStorage.getItem('username')) {
                     const data = b.data
                     console.log("Control Machines " + data);
                 }
@@ -95,17 +89,13 @@ const ControlMachines = (props) =>
                 setTimestamp(data.Timestamp)
 
             }
-            socket.onclose = () =>
-            {
-                socket.onopen = (event) =>
-                {
+            socket.onclose = () => {
+                socket.onopen = (event) => {
                     console.log('WebSocket connection established again after closed :', event);
                 }
             }
-            return () =>
-            {
-                if (socket)
-                {
+            return () => {
+                if (socket) {
                     console.log('WebSocket connection closed: close event');
                     socket.close()
                 }
