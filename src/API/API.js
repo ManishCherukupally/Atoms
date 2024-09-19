@@ -10,7 +10,7 @@ const client = axios.create({
     baseURL: 'http://dev.atomssol.in/backend',
 });
  export default client
-
+ //
 
 // const client = axios.create({
 //     baseURL: 'http://192.168.29.144:8000/backend',
