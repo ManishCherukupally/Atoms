@@ -7,7 +7,7 @@ axios.defaults.xsrfCookieName= 'csrftoken';
 axios.defaults.xsrfHeaderName='x-csrftoken';
 
 const client = axios.create({
-    baseURL: 'http://dev.atomssol.in/backend',
+    baseURL: 'https://dev.atomssol.in/backend',
 });
  export default client
  //
