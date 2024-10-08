@@ -63,7 +63,7 @@ const ControlMachines = (props) => {
 
         // web socket
         function websocket() {
-            let url = `ws://dev.atomssol.in:8000/Control_Socket/?machine_id=${machineid}`
+            let url = `wss://dev.atomssol.in:8000/Control_Socket/?machine_id=${machineid}`
 
             const socket = new WebSocket(url)
 

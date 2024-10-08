@@ -24,7 +24,7 @@ const DashBoardPage = () => {
 
     // Establish WebSocket connection and handle messages
     useEffect(() => {
-        let url = `ws://dev.atomssol.in:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
+        let url = `wss://dev.atomssol.in:8000/dashboardSocket/?user_id=${window.localStorage.getItem('userid')}`;
         const socket = new WebSocket(url);
 
         socket.onopen = (event) => {
