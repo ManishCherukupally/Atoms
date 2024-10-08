@@ -1,14 +1,13 @@
 import React, { useEffect, useState, } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import
-{
-    TextInput,
-    PasswordInput,
-    Paper,
-    Container,
-    Button,
-    Image,
+import {
+TextInput,
+PasswordInput,
+Paper,
+Container,
+Button,
+Image,
 
 } from '@mantine/core';
 import client from '../API/API';
@@ -21,8 +20,7 @@ import { logInStatus } from '../Store/store';
 
 
 
-const LoginPage = () =>
-{
+const LoginPage = () => {
 
     const [loader, setLoader] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(logInStatus)
@@ -44,19 +42,15 @@ const LoginPage = () =>
 
 
 
-    async function handleLogin(values)
-    {
+    async function handleLogin(values) {
         setLoader(true)
-        try
-        {
+        try {
             await client.post('/login/', {
                 username: values.username,
                 password: values.password
-            }).then((response) =>  
-            {
+            }).then((response) => {
 
-                if (response.data.status === 'user_validated')
-                {
+                if (response.data.status === 'user_validated') {
 
                     console.log("Login : " + JSON.stringify(response.data));
                     // window.localStorage.setItem("Authorization", response.data.generated_token)
@@ -67,14 +61,12 @@ const LoginPage = () =>
                     setIsLoggedIn(true)
 
 
-                } else if (response.status !== 200)
-                {
+                } else if (response.status !== 200) {
                     setLoader(false)
                     // setError(`Got error while connecting with status ${response.status}`)
                 }
 
-                else
-                {
+                else {
                     setLoader(false)
                     // setError("Enter correct password or username ")
                     const errormessage = response.data.status === "unauthorized_user" ? "Invalid Credentials" : response.data.error;
@@ -85,8 +77,7 @@ const LoginPage = () =>
                 }
 
             })
-        } catch (error)
-        {
+        } catch (error) {
             console.log(error)
             setLoader(false)
         }

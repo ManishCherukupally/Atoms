@@ -22,8 +22,7 @@ import RunTimeTable from '../components/table/RunTimeTable';
 import { useNavigate } from 'react-router-dom';
 
 
-const ReportPage = () =>
-{
+const ReportPage = () => {
     // hooks to display table or graph
     const [tableDisplay, setTableDisplay] = useState(true);
     const [graphDisplay, setGraphDisplay] = useState(false);
@@ -63,8 +62,7 @@ const ReportPage = () =>
     const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
     // Function for generating graph in PDF
-    const graphPdf = async () =>
-    {
+    const graphPdf = async () => {
         setIsGeneratingPdf(true);
 
         const element = componentRef.current;
@@ -92,8 +90,7 @@ const ReportPage = () =>
     };
 
 
-    const allDates = date.map((date) =>
-    {
+    const allDates = date.map((date) => {
         const newDate = new Date(date)
         const year = newDate.getFullYear()
         const month = newDate.getMonth() + 1
@@ -102,8 +99,7 @@ const ReportPage = () =>
     })
 
     // Function for exporting data to pdf
-    const exportPdf = () =>
-    {
+    const exportPdf = () => {
         const doc = new jsPDF("landscape")
         doc.setFillColor('#D3D3D3', 'F'); // Set fill color to yellow
         doc.rect(0, 0, doc.internal.pageSize.getWidth(), 30, 'F');
@@ -124,8 +120,7 @@ const ReportPage = () =>
 
     // function for exporting to excel starts here
 
-    const exportExcel = () =>
-    {
+    const exportExcel = () => {
         const header = reportData.map((body) => body.labels.x_label)
 
         const thead = [...header, ...reportData[0].ledger]
@@ -135,20 +130,16 @@ const ReportPage = () =>
         const sheetData = [thead]
 
 
-        body.map((row) =>
-        {
+        body.map((row) => {
             const rows = []
-            Object.values(row).map((rowcells, index) =>
-            {
+            Object.values(row).map((rowcells, index) => {
 
-                if (index === 0)
-                {
+                if (index === 0) {
 
                     const time = rowcells
                     return rows.push(time)
                 }
-                else
-                {
+                else {
                     return rows.push(...rowcells)
                 }
 
@@ -171,8 +162,7 @@ const ReportPage = () =>
     // function for exporting to excel ends here
 
     // Function for setting to display the table or graph
-    useEffect(() =>
-    {
+    useEffect(() => {
         setTableDisplay(val === "table" ? true : false);
         setGraphDisplay(val !== "table" ? true : false);
 
@@ -183,32 +173,27 @@ const ReportPage = () =>
 
     // Function for Getting Report Module Rest api
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         client.get("/Reports_module/", {
             headers: {
                 "Content-Type": "application/json",
                 "user-id": window.localStorage.getItem('userid')
             },
         })
-            .then((resp) =>
-            {
-                if (resp.data.status === "login_required")
-                {
+            .then((resp) => {
+                if (resp.data.status === "login_required") {
 
                     window.localStorage.clear()
                     window.location.reload()
                     navigate('/login')
                     // setError(`Got error while connecting with status ${response.status}`)
-                } else
-                {
+                } else {
                     setData(resp.data.drop_down)
                     setReportType(resp.data.report_titles)
                 }
 
 
-            }).catch((error) =>
-            {
+            }).catch((error) => {
                 console.error("Error fetching machines:", error);
                 // Handle error, e.g., display an error message to the user
             });
@@ -218,19 +203,15 @@ const ReportPage = () =>
 
     // Function for making dependency dropdowns starts here
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         // Update dependent dropdown options based on selected value
         // console.log(selectedValues)
         const selectedType = Object.keys(selectedValues)[0]; // Assuming only one type can be selected at a time
 
-        if (selectedType)
-        {
+        if (selectedType) {
 
-            data.forEach(item =>
-            {
-                if (item.node === selectedValues[selectedType])
-                {
+            data.forEach(item => {
+                if (item.node === selectedValues[selectedType]) {
                     setLastselectedNode(item.node_id)
                 }
             })
@@ -241,8 +222,7 @@ const ReportPage = () =>
 
             // Update options for remaining dropdowns
             const updatedOptions = {};
-            data.filter(item => item.type !== selectedType).forEach(item =>
-            {
+            data.filter(item => item.type !== selectedType).forEach(item => {
                 const filteredOptions = item.parent.includes(selectedNode)
                     ? data.node // Extract nodes here
                     : [];
@@ -256,10 +236,8 @@ const ReportPage = () =>
 
     // function for filtering type in the data
     const dropdownArr = []
-    data.forEach((item) =>
-    {
-        if (!dropdownArr.includes(item.type))
-        {
+    data.forEach((item) => {
+        if (!dropdownArr.includes(item.type)) {
             dropdownArr.push(item.type);
         }
     });
@@ -270,10 +248,8 @@ const ReportPage = () =>
 
     // Function for getting Machine name for dropdowns starts here
     const arr1 = []
-    machineListData.map((item) =>
-    {
-        if (selectedModel === item.Model_No)
-        {
+    machineListData.map((item) => {
+        if (selectedModel === item.Model_No) {
             arr1.push(item.Machine_Name)
         }
 
@@ -281,16 +257,12 @@ const ReportPage = () =>
     // Function for getting Machine name for dropdowns ends here
 
     // Function for getting machine id starts here
-    useEffect(() =>
-    {
+    useEffect(() => {
 
-        const selectedMachineid = () =>
-        {
+        const selectedMachineid = () => {
             // console.log(nodedata);
-            nodedata.map((machine) =>
-            {
-                if (machine.Machine_Name === selectedMachine)
-                {
+            nodedata.map((machine) => {
+                if (machine.Machine_Name === selectedMachine) {
                     // nodeid = machine.node_id
                     setMachineid(machine.Machine_id)
                     // console.log(machine.node_id)
@@ -305,19 +277,16 @@ const ReportPage = () =>
     // Function for getting machine id ends here
 
     // Function for handling dropdown selection
-    const handleDropdownChange = (type, value) =>
-    {
+    const handleDropdownChange = (type, value) => {
 
         setSelectedValues({ [type]: value });
         setEnable(false)
     };
 
 
-    const handleGetMachines = async () =>
-    {
+    const handleGetMachines = async () => {
         setButtonState('Reset')
-        try
-        {
+        try {
             const res = await client.get("/Report_List/", {
 
                 params: {
@@ -338,8 +307,7 @@ const ReportPage = () =>
             // setMachines(arr)
             setMachineDropdownstatus(true);
 
-        } catch (error)
-        {
+        } catch (error) {
 
             console.error("Error fetching machines:", error);
 
@@ -348,8 +316,7 @@ const ReportPage = () =>
     }
 
     // Function for reset button starts here
-    const resetButton = () =>
-    {
+    const resetButton = () => {
         setSelectedValues({})
         setEnable(true)
         setButtonState("Get Machines")
@@ -365,8 +332,7 @@ const ReportPage = () =>
     // Function for reset button ends here
 
     // Function to get report details rest api starts here
-    const onClickReport = async () =>
-    {
+    const onClickReport = async () => {
         setEnable(true)
         // const endtime = convertedDates[1] === "1970-0-1" || undefined || null ? convertedDates[0] : convertedDates[1]
         const request = {
@@ -377,8 +343,7 @@ const ReportPage = () =>
             user_id: window.localStorage.getItem('userid'),
         }
 
-        try
-        {
+        try {
 
             const res = await client.post('/Reports_details/', request, {
                 withCredentials: true,
@@ -388,12 +353,10 @@ const ReportPage = () =>
             setReportData(reportData)
             setDisplayBody(true)
 
-        } catch (error)
-        {
+        } catch (error) {
             console.log(error)
 
-        } finally
-        {
+        } finally {
             setEnable(false)
         }
 
@@ -402,8 +365,7 @@ const ReportPage = () =>
 
     // table header Filtered Data
 
-    const tableHead = reportData.map((headcells) =>
-    {
+    const tableHead = reportData.map((headcells) => {
         const newtablehead = []
         const time = headcells.labels.x_label
 
@@ -412,8 +374,7 @@ const ReportPage = () =>
         return newtablehead
     })
     // console.log("table Head : " + tableHead);
-    const tableBody = reportData.map((body) =>
-    {
+    const tableBody = reportData.map((body) => {
         return body.data
     })
     // console.log("Table body : " + JSON.stringify(...tableBody));
@@ -427,8 +388,7 @@ const ReportPage = () =>
             <Box mt={20} p={'1rem'} pt={0}>
                 {/* Company Based Dropdowns Starts here */}
                 <SimpleGrid cols={6} gap={"md "}>
-                    {uniqueDropdownArr.map((type, index) =>
-                    {
+                    {uniqueDropdownArr.map((type, index) => {
 
                         const options = dependentDropdownOptions[type] || [...new Set(data.filter(item => item.type === type).map(item => item.node))];
                         return <Select
@@ -570,8 +530,7 @@ const ReportPage = () =>
 
                                                         <tbody >
                                                             {
-                                                                tableBody[0].map((row) =>
-                                                                {
+                                                                tableBody[0].map((row) => {
                                                                     const totalCells = [row.x_axis_data, ...row.y_axis_data]
                                                                     return <tr >{totalCells.map(cells => <td style={{ fontWeight: 'normal' }}>{cells}</td>)}</tr>
                                                                 })
@@ -596,32 +555,25 @@ const ReportPage = () =>
                             <div ref={componentRef}>
                                 {
 
-                                    reportData.map((card) =>
-                                    {
+                                    reportData.map((card) => {
 
-                                        if (card.card === "Line")
-                                        {
+                                        if (card.card === "Line") {
                                             const ledger = card.ledger
-                                            if (ledger.length > 1)
-                                            {
+                                            if (ledger.length > 1) {
                                                 return <ReportSeriesLine data={card} />
 
-                                            } else
-                                            {
+                                            } else {
                                                 return <LineChart data={card} />
                                             }
 
 
                                         }
-                                        if (card.card === "Bar")
-                                        {
+                                        if (card.card === "Bar") {
 
                                             const ledger = card.ledger
-                                            if (ledger.length > 1)
-                                            {
+                                            if (ledger.length > 1) {
                                                 return <SeriesBarChart data={card} />
-                                            } else
-                                            {
+                                            } else {
                                                 return <ReportBarChart data={card} />
                                             }
                                         }
